@@ -10,26 +10,43 @@ body {
 }
 
 /* Navigation */
-nav {
-    background-color: #111;
-    padding: 15px;
-    text-align: center;
+#navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px 0;
+    transition: background 0.4s ease-in-out, padding 0.3s ease;
+    z-index: 1000;
 }
 
-nav ul {
+#navbar ul {
     list-style: none;
+    text-align: center;
     padding: 0;
+    margin: 0;
 }
 
-nav ul li {
+#navbar ul li {
     display: inline;
     margin: 0 15px;
 }
 
-nav ul li a {
-    color: #f4c842;
+#navbar ul li a {
     text-decoration: none;
-    font-weight: bold;
+    color: #ffcc00;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+#navbar ul li a:hover {
+    color: #fff;
+}
+
+.scrolled {
+    background: rgba(0, 0, 0, 0.95);
+    padding: 10px 0;
 }
 
 /* Hero Section */
@@ -195,4 +212,8 @@ footer {
 @keyframes bounce {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
+}
+
+html {
+    scroll-behavior: smooth;
 }
