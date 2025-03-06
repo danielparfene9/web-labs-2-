@@ -3,11 +3,29 @@
 /* General Styles */
 body {
     font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to bottom, white, #2575fc);
     margin: 0;
     padding: 0;
     background-color: #0a0a0a;
     color: #ffffff;
     line-height: 1.6;
+}
+
+#features {
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Purple-blue */
+    color: white;
+}
+
+#tokenomics {
+    background: linear-gradient(to right, #141E30, #243B55); /* Dark blue tones */
+}
+
+#roadmap {
+    background: linear-gradient(to right, #009FFF, #ec2F4B); /* Blue-red contrast */
+}
+
+#contact {
+    background: linear-gradient(to right, #11998e, #38ef7d); /* Green shades */
 }
 
 /* Navigation */
