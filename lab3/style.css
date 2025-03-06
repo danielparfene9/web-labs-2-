@@ -140,3 +140,64 @@ footer {
         margin: 20px;
     }
 }
+
+.mascot {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+    z-index: 1000;
+    cursor: pointer;
+    animation: mascot-entry 1.5s ease-in-out forwards;
+}
+
+.mascot img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.5s ease-in-out;
+}
+
+.mascot:hover .mascot-message {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.mascot:hover img {
+    transform: rotate(10deg) scale(1.1);
+}
+
+.mascot-message {
+    position: absolute;
+    bottom: 100%;
+    right: 50%;
+    transform: translateX(50%) translateY(10px);
+    background: rgba(255, 204, 0, 0.9);
+    color: #000;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@keyframes mascot-entry {
+    0% {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.mascot img {
+    animation: bounce 1.5s infinite ease-in-out 5s;
+}
