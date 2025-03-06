@@ -36,6 +36,7 @@ nav ul li a {
 .hero {
     text-align: center;
     padding: 100px 20px;
+    position: relative;
 }
 
 .hero h1 {
@@ -50,12 +51,14 @@ nav ul li a {
 
 .cta {
     display: inline-block;
-    padding: 15px 30px;
-    background: #f4c842;
+    background-color: #ffcc00;
     color: #000;
-    font-weight: bold;
-    text-decoration: none;
+    padding: 12px 24px;
     border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s ease;
+    margin-top: 20px;
 }
 
 /* Sections */
@@ -82,4 +85,58 @@ footer {
     text-align: center;
     padding: 20px;
     background: #111;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.cta:hover {
+    background-color: #e6b800;
+}
+
+.desktop-only {
+    display: block;
+}
+
+.mobile-only {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .hero {
+        padding: 80px 15px;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+    }
+
+    .cta {
+        font-size: 1.2rem;
+        padding: 14px 28px;
+        display: block;
+        width: 80%;
+        margin: 20px auto;
+        text-align: center;
+    }
+
+    .desktop-only {
+        display: none;
+    }
+
+    .mobile-only {
+        display: block;
+        text-align: center;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        margin: 20px;
+    }
 }
