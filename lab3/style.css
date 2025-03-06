@@ -71,18 +71,33 @@ body {
     display: inline-block;
     background-color: #ffcc00;
     color: #000;
-    padding: 12px 24px;
+    padding: 14px 28px;
     border-radius: 5px;
     text-decoration: none;
     font-weight: bold;
-    transition: background 0.3s ease;
-    margin-top: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0px 4px 10px rgba(255, 204, 0, 0.3);
 }
 
 /* Sections */
 section {
-    padding: 80px 20px;
+    padding: 80px 10%;
     text-align: center;
+    opacity: 0; 
+    transform: translateY(50px);
+    animation: fadeInUp 1s ease-out forwards;
+    animation-delay: 0.4s;
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .features, .tokenomics, .roadmap, .contact {
@@ -113,6 +128,8 @@ footer {
 
 .cta:hover {
     background-color: #e6b800;
+    transform: scale(1.05);
+    box-shadow: 0px 6px 12px rgba(255, 204, 0, 0.5);
 }
 
 .desktop-only {
@@ -177,11 +194,15 @@ footer {
     
     animation: bounce 1.5s infinite ease-in-out;
     animation-delay: 5s;
+
+    filter: drop-shadow(0px 0px 8px rgba(255, 204, 0, 0.5));
+    transition: filter 0.3s ease-in-out;
 }
 
 .mascot:hover img {
     animation: none;
     transform: rotate(10deg) scale(1.1);
+    filter: drop-shadow(0px 0px 12px rgba(255, 204, 0, 0.8));
 }
 
 .mascot-message {
