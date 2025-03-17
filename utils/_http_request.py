@@ -20,7 +20,7 @@ class HTTPClient:
             return None
         
     @staticmethod
-    def send_request(url: str, method: str = "GET", headers: Optional[Dict[str, str]] = None) -> Optional[str]:
+    def send_request(url: str, method: str = "GET", headers: Optional[Dict[str, str]] = None, timeout=5) -> Optional[str]:
         parsed = re.match(r"https?://([^/]+)(.*)", url)
         if not parsed:
             return None
@@ -41,13 +41,17 @@ class HTTPClient:
         request = "\r\n".join(request_lines)
 
         try:
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock: # IPv4 + TCP
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+                sock.settimeout(timeout)
                 sock.connect((host, port))
                 sock.sendall(request.encode())
 
                 response = b""
                 while chunk := sock.recv(4096):
                     response += chunk
+        except socket.timeout:
+            print("Request timed out.")
+            return None
         except (socket.error, ConnectionError) as e:
             return None
 
