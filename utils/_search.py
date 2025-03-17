@@ -1,4 +1,5 @@
-from ._utils import Client, ENGINE_URL, re, List
+from ._utils import ENGINE_URL, re, List
+from ._http_request import HTTPClient as Client
 
 class SearchError(Exception):
     pass

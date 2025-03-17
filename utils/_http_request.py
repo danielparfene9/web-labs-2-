@@ -1,4 +1,5 @@
-from ._utils import USER_AGENT, Optional, Dict, socket, re, Parser
+from ._utils import USER_AGENT, Optional, Dict, socket, re
+from ._parser import HTMLExtractor as Parser
 
 class HTTPClient:
 
