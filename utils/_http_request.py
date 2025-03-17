@@ -11,3 +11,11 @@ class HTTPClient:
         "Accept": "text/html",
         "Connection": "close",
     }
+
+    @staticmethod
+    def _parse_http_response(response: bytes) -> Optional[str]:
+        try:
+            headers, body = response.split(b"\r\n\r\n", 1)
+            return body.decode(errors="ignore")
+        except ValueError:
+            return None
