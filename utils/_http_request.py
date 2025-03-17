@@ -21,3 +21,25 @@ class HTTPClient:
             return HTMLExtractor.from_html(html_content)
         except ValueError:
             return None
+        
+    @staticmethod
+    def send_request(url: str, method: str = "GET", headers: Optional[Dict[str, str]] = None) -> Optional[str]:
+        parsed = re.match(r"https?://([^/]+)(.*)", url)
+        if not parsed:
+            return None
+
+        host, path = parsed.groups()
+        path = path or "/"
+        port = 80
+
+        request_headers = {**HTTPClient.DEFAULT_HEADERS, **(headers or {})}
+
+        request_lines = [
+            f"{method} {path} HTTP/1.1",
+            f"Host: {host}",
+            *[f"{key}: {value}" for key, value in request_headers.items()],
+            "",
+        ]
+
+        request = "\r\n".join(request_lines)
+        
