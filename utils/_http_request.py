@@ -16,6 +16,8 @@ class HTTPClient:
     def _parse_http_response(response: bytes) -> Optional[str]:
         try:
             headers, body = response.split(b"\r\n\r\n", 1)
-            return body.decode(errors="ignore")
+
+            html_content = body.decode(errors="ignore")
+            return HTMLExtractor.from_html(html_content)
         except ValueError:
             return None
