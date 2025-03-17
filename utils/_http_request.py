@@ -42,4 +42,17 @@ class HTTPClient:
         ]
 
         request = "\r\n".join(request_lines)
-        
+
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock: # IPv4 + TCP
+                sock.connect((host, port))
+                sock.sendall(request.encode())
+
+                response = b""
+                while chunk := sock.recv(4096):
+                    response += chunk
+        except (socket.error, ConnectionError) as e:
+            return None
+
+        return HTTPClient._parse_http_response(response)
+    
