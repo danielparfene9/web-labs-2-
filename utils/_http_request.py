@@ -1,8 +1,4 @@
-import socket
-import re
-from typing import Optional, Dict
-from ._parser import HTMLExtractor
-from ._utils import USER_AGENT
+from ._utils import USER_AGENT, Optional, Dict, socket, re, Parser
 
 class HTTPClient:
 
@@ -18,7 +14,7 @@ class HTTPClient:
             headers, body = response.split(b"\r\n\r\n", 1)
 
             html_content = body.decode(errors="ignore")
-            return HTMLExtractor.from_html(html_content)
+            return Parser.from_html(html_content)
         except ValueError:
             return None
         

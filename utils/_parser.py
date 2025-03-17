@@ -1,7 +1,4 @@
-from html.parser import HTMLParser
-from typing import List
-from pydantic import BaseModel, Field
-
+from ._utils import HTMLParser, List, BaseModel, Field
 
 class HTMLExtractorConfig(BaseModel):
     convert_charrefs: bool = Field(default=True, description="Convert character references like &amp; to &")
