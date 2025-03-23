@@ -8,7 +8,7 @@ def main():
     args = parser.parse_args()
     
     if args.url:
-        print(Client.send_request(args.url))
+        print(Client.get_response(Client.send_request(args.url)))
     elif args.search:
         print(Search.search_term(args.search))
     else:
