@@ -1,4 +1,4 @@
-import os, socket, re, ssl
+import os, socket, re, ssl, json
 from typing import Dict, Optional, List, Tuple
 from html.parser import HTMLParser
 from pydantic import BaseModel, Field
@@ -40,4 +40,5 @@ __all__ = [
     "ssl",
     "Tuple",
     "BeautifulSoup",
+    "json"
 ]

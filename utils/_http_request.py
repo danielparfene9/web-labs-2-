@@ -5,7 +5,7 @@ class HTTPClient:
 
     DEFAULT_HEADERS = {
         "User-Agent": USER_AGENT,
-        "Accept": "text/html",
+        "Accept": "text/html,application/json;q=0.9",
         "Connection": "close",
     }
 
@@ -36,7 +36,7 @@ class HTTPClient:
             return 0, {}, None
         
     @staticmethod
-    def send_request(url: str, method: str = "GET", headers: Optional[Dict[str, str]] = None, timeout=10, redirect_remaining = 5) -> Optional[str]:
+    def send_request(url: str, method: str = "GET", headers: Optional[Dict[str, str]] = None, timeout=10, redirect_remaining = MAX_REDIRECTS) -> Optional[str]:
         
         if redirect_remaining <= 0:
             raise Exception("Too many redirects")

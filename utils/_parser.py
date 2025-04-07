@@ -1,4 +1,4 @@
-from ._utils import HTMLParser, List, BaseModel, Field
+from ._utils import HTMLParser, List, BaseModel, Field, json
 
 class HTMLExtractorConfig(BaseModel):
     convert_charrefs: bool = Field(default=True, description="Convert character references like &amp; to &")
@@ -30,7 +30,37 @@ class HTMLExtractor(HTMLParser):
         return " ".join(self.text)
 
     @classmethod
-    def from_html(cls, html: str, config: HTMLExtractorConfig = HTMLExtractorConfig()) -> str:
+    def from_html(cls, content: str, config: HTMLExtractorConfig = HTMLExtractorConfig()) -> str:
+        content = content.strip()
+
+        if (content.startswith("{") and content.endswith("}")) or \
+           (content.startswith("[") and content.endswith("]")):
+            try:
+                json_obj = json.loads(content)
+                return cls._extract_text_from_json(json_obj)
+            except json.JSONDecodeError:
+                pass
+
         parser = cls(config)
-        parser.feed(html)
+        parser.feed(content)
         return parser.get_text()
+
+    @staticmethod
+    def _extract_text_from_json(obj) -> str:
+
+        text_chunks = []
+
+        def recurse(value):
+            if isinstance(value, dict):
+                for v in value.values():
+                    recurse(v)
+            elif isinstance(value, list):
+                for item in value:
+                    recurse(item)
+            elif isinstance(value, str):
+                clean = value.strip()
+                if clean:
+                    text_chunks.append(clean)
+
+        recurse(obj)
+        return " ".join(text_chunks)
