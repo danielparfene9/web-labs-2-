@@ -1,5 +1,6 @@
 from ._utils import ENGINE_URL, re, List, Tuple, BeautifulSoup
 from ._http_request import HTTPClient as Client
+from urllib.parse import urlparse, parse_qs, unquote
 
 class SearchError(Exception):
     pass
@@ -29,11 +30,26 @@ class SearchEngine:
     def _extract_links(html_content: str) -> List[Tuple[str, str]]:
         soup = BeautifulSoup(html_content, 'html.parser')
         results = []
+
         for a_tag in soup.find_all('a', href=True):
-            href = a_tag['href']
+            raw_href = a_tag['href']
             title = a_tag.get_text(strip=True)
-            if href and title:
-                results.append((href, title))
+
+            # Пропускаем пустые заголовки
+            if not title:
+                continue
+
+            # DuckDuckGo редиректы
+            if "duckduckgo.com/l/?" in raw_href and "uddg=" in raw_href:
+                parsed_url = urlparse(raw_href)
+                query_params = parse_qs(parsed_url.query)
+                actual_url = unquote(query_params.get("uddg", [""])[0])
+                if actual_url.startswith("http"):
+                    results.append((actual_url, title))
+            # Обычные прямые ссылки
+            elif raw_href.startswith("http"):
+                results.append((raw_href, title))
+
         return results
 
     @staticmethod

@@ -1,4 +1,4 @@
-from ._utils import USER_AGENT, Optional, Dict, socket, re, ssl
+from ._utils import USER_AGENT, Optional, Dict, socket, re, ssl, MAX_REDIRECTS
 from ._parser import HTMLExtractor as Parser
 
 class HTTPClient:
