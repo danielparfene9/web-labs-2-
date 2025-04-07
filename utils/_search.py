@@ -1,4 +1,4 @@
-from ._utils import ENGINE_URL, re, List
+from ._utils import ENGINE_URL, re, List, Tuple, BeautifulSoup
 from ._http_request import HTTPClient as Client
 
 class SearchError(Exception):
@@ -14,19 +14,27 @@ class SearchEngine:
         if not response:
             raise SearchError("Failed to fetch search results.")
 
-        readable_text = Client._parse_http_response(response)
-        if not readable_text:
-            raise SearchError("Could not extract text from the response.")
+        # readable_text = Client._parse_http_response(response)
+        # if not readable_text:
+        #     raise SearchError("Could not extract text from the response.")
 
-        results = SearchEngine._extract_links(readable_text)
+        results = SearchEngine._extract_links(response)
+
         if not results:
             raise SearchError("No search results found.")
 
         return SearchEngine._format_results(results)
 
     @staticmethod
-    def _extract_links(html_content: str) -> List[tuple]:
-        return re.findall(r'<a rel="nofollow" class="result__a" href="(.*?)">(.*?)</a>', html_content)
+    def _extract_links(html_content: str) -> List[Tuple[str, str]]:
+        soup = BeautifulSoup(html_content, 'html.parser')
+        results = []
+        for a_tag in soup.find_all('a', href=True):
+            href = a_tag['href']
+            title = a_tag.get_text(strip=True)
+            if href and title:
+                results.append((href, title))
+        return results
 
     @staticmethod
     def _format_results(results: List[tuple]) -> str:
