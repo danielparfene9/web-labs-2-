@@ -1,5 +1,8 @@
-from ._utils import USER_AGENT, Optional, Dict, socket, re, ssl, MAX_REDIRECTS, Tuple, HTTPResponse
+from ._utils import USER_AGENT, Optional, Dict, socket, re, ssl, MAX_REDIRECTS, Tuple, HTTPResponse, ENGINE_URL
 from ._parser import HTMLExtractor as Parser
+from ._http_cache import HTTPCache
+
+cache = HTTPCache()
 
 class HTTPClient:
 
@@ -38,6 +41,11 @@ class HTTPClient:
     @staticmethod
     def send_request(url: str, method: str = "GET", headers: Optional[Dict[str, str]] = None, timeout=10, redirect_remaining = MAX_REDIRECTS) -> Optional[str]:
         
+        cached = cache.get(url)
+        if cached:
+            print("Using cached response")
+            return HTTPClient._create_response_bytes(cached["status_code"], cached["headers"], cached["body"])
+        
         if redirect_remaining <= 0:
             raise Exception("Too many redirects")
         
@@ -72,8 +80,13 @@ class HTTPClient:
                     break
                 response += chunk
 
-        status_code, response_headers, _ = HTTPClient._parse_http_response(response)
+        status_code, response_headers, parsed_body = HTTPClient._parse_http_response(response)
+
+        if parsed_body and ENGINE_URL not in url:
+            cache.set(url, status_code, response_headers, parsed_body, ttl=60)
+
         if status_code in (301, 302, 307, 308):
+            print(f"Redirection No.{-1*(redirect_remaining-MAX_REDIRECTS)}")
             location = response_headers.get("Location")
             if not location:
                 raise Exception("Redirect status but no Location header found")
@@ -83,6 +96,12 @@ class HTTPClient:
         
         return response
     
+    @staticmethod
+    def _create_response_bytes(status: int, headers: Dict[str, str], body: str) -> bytes:
+        header_lines = "\r\n".join([f"{k}: {v}" for k, v in headers.items()])
+        response = f"HTTP/1.1 {status} OK\r\n{header_lines}\r\n\r\n{body}"
+        return response.encode("utf-8", errors="ignore")
+
     @staticmethod
     def get_response(response: bytes) -> HTTPResponse:
         status_code, headers, body = HTTPClient._parse_http_response(response)
